@@ -1,0 +1,19 @@
+services:
+  gpt5:
+    build:
+      context: ./servers/gpt5-server
+      dockerfile: Dockerfile
+    # Keep the container alive; Claude will exec the real command with stdio.
+    command: ["tail", "-f", "/dev/null"]
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      DEBUG_MCP: ${DEBUG_MCP:-0}
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /home/app/.npm
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+
+# no networks/volumes needed for this simple case

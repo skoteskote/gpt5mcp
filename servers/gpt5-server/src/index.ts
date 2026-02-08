@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+console.log = () => {};
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
@@ -7,17 +8,18 @@ import {
   ErrorCode,
   McpError
 } from "@modelcontextprotocol/sdk/types.js";
-import path from 'path';
-import { fileURLToPath } from 'url';
-import dotenv from 'dotenv';
 import { z } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
 import { callGPT5, callGPT5WithMessages } from './utils.js';
 
+// Import node modules with type assertion
+const path = await import('path');
+const url = await import('url');
+const dotenv = await import('dotenv');
+
 // Initialize environment from parent directory
-import { dirname } from 'path';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const envPath = path.join(__dirname, '../../.env');
 dotenv.config({ path: envPath });
 console.error("Environment loaded from:", envPath);
@@ -182,7 +184,7 @@ async function main() {
   );
 
   // Start the server
-  console.error("Starting GPT-5 MCP server");
+  // console.error("Starting GPT-5 MCP server");
   
   try {
     const transport = new StdioServerTransport();
